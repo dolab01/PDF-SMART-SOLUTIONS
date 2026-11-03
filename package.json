@@ -1,0 +1,15 @@
+
+{
+  "name": "pdf-smart-solutions",
+  "version": "1.0.0",
+  "description": "Online PDF tools and document management platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "multer": "^2.0.2",
+    "pdf-lib": "^1.17.1"
+  }
+}
