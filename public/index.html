@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF Smart Solutions</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}
+header{background:#111d35;color:white;padding:22px 7%;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:23px;font-weight:bold}
+.hero{text-align:center;padding:65px 20px 35px;background:linear-gradient(120deg,#14284d,#2858a7);color:white}
+.hero h1{font-size:40px;margin:0 0 15px}
+.hero p{font-size:17px;color:#e1eaff}
+main{max-width:950px;margin:35px auto;padding:0 18px}
+.panel{background:white;padding:28px;border-radius:16px;box-shadow:0 5px 25px #17203312}
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px;margin:25px 0}
+.tool{background:#f2f6ff;padding:20px;border-radius:12px}
+.tool h3{margin-top:0}
+button{background:#2463df;color:white;border:0;padding:13px 22px;border-radius:8px;cursor:pointer;font-weight:bold}
+button:hover{background:#174db5}
+input{margin:15px 0;display:block;max-width:100%}
+#message{margin-top:15px}
+footer{text-align:center;padding:30px;color:#718096}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">📄 PDF Smart Solutions</div>
+<div>Simple. Fast. Secure.</div>
+</header>
+<section class="hero">
+<h1>Make PDFs Work Smarter</h1>
+<p>Simple online tools to manage your PDF documents.</p>
+</section>
+<main>
+<section class="panel">
+<h2>Merge PDF Files</h2>
+<p>Select at least two PDF documents to combine them into one file.</p>
+<input type="file" id="files" accept="application/pdf,.pdf" multiple>
+<button onclick="mergePDF()">Merge PDF Files</button>
+<p id="message"></p>
+<div class="tools">
+<div class="tool"><h3>📑 Merge PDFs</h3><p>Combine multiple PDFs into one document.</p></div>
+<div class="tool"><h3>🔐 Private processing</h3><p>Your selected files are processed by the server.</p></div>
+<div class="tool"><h3>⚡ Simple workflow</h3><p>Choose your files and download the result.</p></div>
+</div>
+</section>
+</main>
+<footer>© 2026 PDF Smart Solutions. All rights reserved.</footer>
+<script>
+async function mergePDF(){
+ const files=document.getElementById("files").files;
+ const message=document.getElementById("message");
+ if(files.length<2){message.textContent="Please select at least two PDF files.";return;}
+ const data=new FormData();
+ for(const file of files)data.append("files",file);
+ message.textContent="Merging your PDFs...";
+ try{
+  const response=await fetch("/api/merge",{method:"POST",body:data});
+  if(!response.ok)throw new Error("Unable to merge files.");
+  const blob=await response.blob();
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement("a");
+  link.href=url;link.download="merged.pdf";link.click();
+  URL.revokeObjectURL(url);
+  message.textContent="Success! Your merged PDF has been downloaded.";
+ }catch(error){message.textContent=error.message;}
+}
+</script>
+</body>
+</html>
